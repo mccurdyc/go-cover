@@ -12,10 +12,9 @@ import (
 )
 
 func main() {
-	cp := "neighbor-coverprofile.out"
-
-	if err := os.Setenv("COVERPROFILE_FNAME", cp); err != nil {
-		fmt.Printf("failed to set COVERPROFILE_FNAME with error %+v", err)
+	cp, ok := os.LookupEnv("COVERPROFILE_FNAME")
+	if !ok {
+		fmt.Printf("COVERPROFILE_FNAME is required and not set")
 		os.Exit(1)
 	}
 
