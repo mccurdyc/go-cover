@@ -1,13 +1,11 @@
 default: build
 
 build:
-	go get -u -v github.com/golang/dep/cmd/dep
-	dep ensure -v
 	go fmt ./...
-	go build -o bin/neighbor cmd/neighbor/main.go
+	go build -o bin/go-cover cmd/go-cover/main.go
 
-install: build
-	cp bin/go-cover /usr/local/bin
+install:
+	go install ./cmd/go-cover
 
 run: build
 	./bin/go-cover

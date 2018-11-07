@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 )
 
 func main() {
@@ -16,30 +15,6 @@ func main() {
 	if !ok {
 		fmt.Printf("COVERPROFILE_FNAME is required and not set")
 		os.Exit(1)
-	}
-
-	gocmd, err := exec.Command("which", "go").Output()
-	cleanedGoCmd := strings.Trim(string(gocmd), "\n")
-	fmt.Println(cleanedGoCmd)
-
-	gobak := fmt.Sprintf("%s.bak", cleanedGoCmd)
-	fmt.Println(gobak)
-
-	_, err = os.Stat(gobak)
-	if os.IsNotExist(err) {
-		fmt.Println("copying file...")
-		err := exec.Command("sudo", "mv", cleanedGoCmd, gobak).Run()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
-
-	if os.IsNotExist(err) {
-		fmt.Println("copying go-cover file...")
-		err := exec.Command("sudo", "cp", "/home/mccurdyc/go/src/github.com/mccurdyc/go-cover/bin/go-cover", cleanedGoCmd).Run()
-		if err != nil {
-			fmt.Println(err)
-		}
 	}
 
 	out, err := exec.Command("go", "version").Output()
@@ -58,36 +33,20 @@ func main() {
 		fmt.Printf("error getting absolute path to current working directory: %+v\n", err)
 	}
 
-	err = collateCoverageProfiles(p, cp, "cover-profile.out")
+	err = collateCoverageProfiles(p, cp, "cover.out")
 	if err != nil {
 		fmt.Printf("error collating coverage profiles %+v", err)
 	}
 
 	fmt.Println("collated coverage profiles...")
-
-	_, err = os.Stat(gobak)
-	// if file EXISTS
-	if !os.IsNotExist(err) {
-		fmt.Println("copying bak to gocmd...")
-		err := exec.Command("sudo", "mv", gobak, cleanedGoCmd).Run()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
-
-	out, err = exec.Command("go", "version").Output()
-	if err != nil {
-		fmt.Printf("error running `go version`: %+v\n", err)
-	}
-	fmt.Println(string(out))
 }
 
 // collateCoverageProfiles collates all occurrences of a file named basename in
 // the root defined by root, into a single file, out, with the header row of all
 // coverage profiles, except the first occurrence, stripped.
 //
-// Note that all coverage profiles should have the same header if created by our
-// custom Go binary.
+// Note that all coverage profiles should have the same header if created by the
+// modified Go binary.
 func collateCoverageProfiles(root string, basename string, out string) error {
 	f, err := os.OpenFile(out, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
