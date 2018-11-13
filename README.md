@@ -29,7 +29,7 @@ on a project.
 5. Build the Go binary with the flag enabled.
     ```bash
     cd $HOME/go-cover-src/src
-    ./all.bash
+    sudo ./all.bash
     ```
 
   You can also reference ["Installing Go from source"](https://golang.org/doc/install/source#install)
@@ -46,13 +46,23 @@ on a project.
     export PATH=$HOME/go-cover-src/bin:$PATH
     ```
 
-  Listed below are two great references by @davecheney and a StackOverflow post
+  Listed below are two great references by [@davecheney](https://twitter.com/davecheney) and a StackOverflow post
   1. [How to install multiple versions of Go](https://dave.cheney.net/2014/09/13/how-to-install-multiple-versions)
   2. [You don’t need to set GOROOT, really](https://dave.cheney.net/2013/06/14/you-dont-need-to-set-goroot-really)
       > `$GOROOT` has always been defined as a pointer to the root of your Go installation...
       > When you compile Go from source, the value of $GOROOT is automatically discovered
       > (it is one directory up from the `all.bash` script).
   3. [How to correctly add a path to PATH?](https://unix.stackexchange.com/questions/26047/how-to-correctly-add-a-path-to-path)
+
+## Usage
+1. set `COVERPROFILE_FNAME` environment variable
+
+    This is name is used for the collated coverage profile at the root of the external
+    project directory.
+
+## Questions?
+Check out the [FAQ document](./docs/FAQ.md). If the answer to your question isn't
+in the FAQ document, [open an issue](https://github.com/mccurdyc/go-cover/issues/new).
 
 ## License
 + [GNU General Public License Version 3](./LICENSE)
