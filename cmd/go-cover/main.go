@@ -17,12 +17,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	out, err := exec.Command("go", "version").Output()
-	if err != nil {
-		fmt.Printf("error running `go version`: %+v\n", err)
-	}
-	fmt.Println(string(out))
-
 	if err := exec.Command("make", "test").Run(); err != nil {
 		fmt.Printf("failed to run test command with error %+v", err)
 		os.Exit(1)
@@ -33,7 +27,7 @@ func main() {
 		fmt.Printf("error getting absolute path to current working directory: %+v\n", err)
 	}
 
-	err = collateCoverageProfiles(p, cp, "cover.out")
+	err = collateCoverageProfiles(p, "neighbor-coverprofile.out", cp)
 	if err != nil {
 		fmt.Printf("error collating coverage profiles %+v", err)
 	}
